@@ -8,7 +8,7 @@ class MyService : Service() {
     private var channel = ""
     private lateinit var thread: Thread
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        //解析 Intent 取得字串訊息
+
         intent?.extras?.let {
             channel = it.getString("channel", "")
         }
@@ -20,12 +20,12 @@ class MyService : Service() {
                 else -> "頻道錯誤"
             }
         )
-        //若 thread 被初始化過且正在運行，則中斷它
+
         if (::thread.isInitialized && thread.isAlive)
             thread.interrupt()
         thread = Thread {
             try {
-                Thread.sleep(3000) //延遲三秒
+                Thread.sleep(3000) 
                 broadcast(
                     when(channel) {
                         "music" -> "即將播放本月 TOP10 音樂"
@@ -38,11 +38,11 @@ class MyService : Service() {
                 e.printStackTrace()
             }
         }
-        thread.start() //啟動執行緒
+        thread.start() 
         return START_STICKY
     }
     override fun onBind(intent: Intent): IBinder? = null
-    //發送廣播
+
     private fun broadcast(msg: String) =
         sendBroadcast(Intent(channel).putExtra("msg", msg))
 }
